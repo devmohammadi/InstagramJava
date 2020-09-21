@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "978472401468",
+    "firebase_url": "https://instagramjava-7810b.firebaseio.com",
+    "project_id": "instagramjava-7810b",
+    "storage_bucket": "instagramjava-7810b.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:978472401468:android:a53d9fb5990454a0efe139",
+        "android_client_info": {
+          "package_name": "com.fmohammadi.instagramjava"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "978472401468-qv0p8sstlhm837hocod79d2lpo01j5c5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC3z9UipLmMJLzCBV16m7dyB8dMRDL1i-w"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "978472401468-qv0p8sstlhm837hocod79d2lpo01j5c5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
