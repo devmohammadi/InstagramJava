@@ -13,4 +13,8 @@
     <string name="search">search</string>
     <string name="add_menu">add</string>
     <string name="profile">profile</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="post">post</string>
+    <string name="description">Description...</string>
 </resources>
