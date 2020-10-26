@@ -1,5 +1,6 @@
 package com.fmohammadi.instagramjava.activity;
 
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,9 +16,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fmohammadi.instagramjava.R;
+import com.fmohammadi.instagramjava.activity.MainActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
@@ -25,6 +29,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
 import com.hendraanggrian.appcompat.widget.SocialAutoCompleteTextView;
 import com.theartofdev.edmodo.cropper.CropImage;
+
+import java.util.HashMap;
+import java.util.List;
 
 public class PostActivity extends AppCompatActivity {
 
@@ -62,7 +69,7 @@ public class PostActivity extends AppCompatActivity {
             }
 
             private void upload() {
-                ProgressDialog progressDialog = new ProgressDialog(PostActivity.this);
+                final ProgressDialog progressDialog = new ProgressDialog(PostActivity.this);
                 progressDialog.setMessage("Uploading...");
                 progressDialog.show();
 
@@ -85,9 +92,41 @@ public class PostActivity extends AppCompatActivity {
                             imageUrl = downloadUri.toString();
 
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
+                            String postID = ref.push().getKey();
+
+                            HashMap<String , Object> map = new HashMap<>();
+                            map.put("postid" , postID);
+                            map.put("imageurl" , imageUrl);
+                            map.put("description" , description.getText().toString().trim());
+                            map.put("publisher" , FirebaseAuth.getInstance().getCurrentUser().getUid());
+
+                            ref.child(postID).setValue(map);
+
+                            DatabaseReference hashTagsRef= FirebaseDatabase.getInstance().getReference().child("HashTags");
+                            List<String> hashTags = description.getHashtags();
+                            if(!hashTags.isEmpty()){
+                                for (String tag:hashTags){
+                                    map.clear();
+                                    map.put("tag" , tag.toLowerCase());
+                                    map.put("postid" , postID);
+
+                                    hashTagsRef.child(tag.toLowerCase()).setValue(map);
+                                }
+                            }
+                            progressDialog.dismiss();
+                            startActivity(new Intent(PostActivity.this , MainActivity.class));
+                            finish();
+
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            Toast.makeText(PostActivity.this , e.getMessage() , Toast.LENGTH_LONG).show();
                         }
                     });
+                }else {
 
+                    Toast.makeText(PostActivity.this ,"No Image Selected" , Toast.LENGTH_LONG).show();
                 }
             }
 
