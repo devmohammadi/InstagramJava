@@ -72,7 +72,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="15dp"
             android:hint="@string/description"
-            android:maxLength="5"
+            android:maxLines="5"
             app:socialFlags="hashtag|mention"
             app:hashtagColor="@color/colorPrimaryDark"
             app:mentionColor="@android:color/holo_red_dark"/>

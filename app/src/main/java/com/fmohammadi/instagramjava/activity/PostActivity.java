@@ -57,7 +57,7 @@ public class PostActivity extends AppCompatActivity {
         close.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                startActivity(new Intent(PostActivity.this , MainActivity.class));
+                startActivity(new Intent(PostActivity.this, MainActivity.class));
                 finish();
             }
         });
@@ -73,62 +73,64 @@ public class PostActivity extends AppCompatActivity {
                 progressDialog.setMessage("Uploading...");
                 progressDialog.show();
 
-                if(imageUri != null){
-                    final StorageReference filePath = FirebaseStorage.getInstance().getReference("Posts")
-                            .child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
-                    StorageTask<FileDownloadTask.TaskSnapshot> uploadTask = filePath.getFile(imageUri);
-                    uploadTask.continueWithTask(new Continuation() {
+                if (imageUri != null) {
+                    final StorageReference filePath = FirebaseStorage.getInstance().getReference("Posts").child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
+
+                    StorageTask uploadtask = filePath.putFile(imageUri);
+                    uploadtask.continueWithTask(new Continuation() {
                         @Override
                         public Object then(@NonNull Task task) throws Exception {
-                           if (task.isSuccessful()){
-                               throw task.getException();
-                           }
-                           return filePath.getDownloadUrl();
+                            if (!task.isSuccessful()) {
+                                throw task.getException();
+                            }
+
+                            return filePath.getDownloadUrl();
                         }
                     }).addOnCompleteListener(new OnCompleteListener<Uri>() {
                         @Override
-                        public void onComplete(@NonNull Task <Uri> task) {
+                        public void onComplete(@NonNull Task<Uri> task) {
                             Uri downloadUri = task.getResult();
                             imageUrl = downloadUri.toString();
 
                             DatabaseReference ref = FirebaseDatabase.getInstance().getReference("Posts");
-                            String postID = ref.push().getKey();
+                            String postId = ref.push().getKey();
 
-                            HashMap<String , Object> map = new HashMap<>();
-                            map.put("postid" , postID);
-                            map.put("imageurl" , imageUrl);
-                            map.put("description" , description.getText().toString().trim());
-                            map.put("publisher" , FirebaseAuth.getInstance().getCurrentUser().getUid());
+                            HashMap<String, Object> map = new HashMap<>();
+                            map.put("postid", postId);
+                            map.put("imageurl", imageUrl);
+                            map.put("description", description.getText().toString());
+                            map.put("publisher", FirebaseAuth.getInstance().getCurrentUser().getUid());
 
-                            ref.child(postID).setValue(map);
+                            ref.child(postId).setValue(map);
 
-                            DatabaseReference hashTagsRef= FirebaseDatabase.getInstance().getReference().child("HashTags");
+                            DatabaseReference mHashTagRef = FirebaseDatabase.getInstance().getReference().child("HashTags");
                             List<String> hashTags = description.getHashtags();
-                            if(!hashTags.isEmpty()){
-                                for (String tag:hashTags){
+                            if (!hashTags.isEmpty()) {
+                                for (String tag : hashTags) {
                                     map.clear();
-                                    map.put("tag" , tag.toLowerCase());
-                                    map.put("postid" , postID);
+                                    map.put("tag", tag.toLowerCase());
+                                    map.put("postid", postId);
 
-                                    hashTagsRef.child(tag.toLowerCase()).setValue(map);
+                                    mHashTagRef.child(tag.toLowerCase()).setValue(map);
                                 }
                             }
-                            progressDialog.dismiss();
-                            startActivity(new Intent(PostActivity.this , MainActivity.class));
-                            finish();
 
+                            progressDialog.dismiss();
+                            startActivity(new Intent(PostActivity.this, MainActivity.class));
+                            finish();
                         }
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Toast.makeText(PostActivity.this , e.getMessage() , Toast.LENGTH_LONG).show();
+                            Toast.makeText(PostActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     });
-                }else {
+                } else {
+                    Toast.makeText(PostActivity.this, "No Image Selected!", Toast.LENGTH_SHORT).show();
 
-                    Toast.makeText(PostActivity.this ,"No Image Selected" , Toast.LENGTH_LONG).show();
                 }
             }
+
 
             private String getFileExtension(Uri uri) {
                 return MimeTypeMap.getSingleton().getExtensionFromMimeType(getContentResolver().getType(uri));
@@ -142,13 +144,13 @@ public class PostActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if(requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && requestCode == RESULT_OK){
+        if (requestCode == CropImage.CROP_IMAGE_ACTIVITY_REQUEST_CODE && resultCode == RESULT_OK) {
             CropImage.ActivityResult result = CropImage.getActivityResult(data);
             imageUri = result.getUri();
             image_added.setImageURI(imageUri);
-        }else {
-            Toast.makeText(PostActivity.this , "Try Again!!", Toast.LENGTH_LONG).show();
-            startActivity(new Intent(PostActivity.this , MainActivity.class));
+        } else {
+            Toast.makeText(PostActivity.this, "Try Again!!", Toast.LENGTH_LONG).show();
+            startActivity(new Intent(PostActivity.this, MainActivity.class));
             finish();
         }
     }
