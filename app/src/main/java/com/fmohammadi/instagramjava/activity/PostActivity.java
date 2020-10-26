@@ -16,7 +16,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.fmohammadi.instagramjava.R;
-import com.fmohammadi.instagramjava.activity.MainActivity;
 import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -24,6 +23,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.StorageTask;
@@ -76,7 +76,7 @@ public class PostActivity extends AppCompatActivity {
                 if(imageUri != null){
                     final StorageReference filePath = FirebaseStorage.getInstance().getReference("Posts")
                             .child(System.currentTimeMillis() + "." + getFileExtension(imageUri));
-                    StorageTask uploadTask = filePath.getFile(imageUri);
+                    StorageTask<FileDownloadTask.TaskSnapshot> uploadTask = filePath.getFile(imageUri);
                     uploadTask.continueWithTask(new Continuation() {
                         @Override
                         public Object then(@NonNull Task task) throws Exception {
