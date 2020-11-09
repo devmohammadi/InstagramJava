@@ -59,12 +59,13 @@ public class UserAdapter extends RecyclerView.Adapter<UserAdapter.viewHolder> {
 
         Picasso.get()
                 .load(user.getImageUrl())
-                .placeholder(R.mipmap.ic_launcher)
+                .placeholder(R.drawable.placeholder)
+                .error(R.drawable.error)
                 .into(holder.imageProfile);
 
-        isFollowed(user.getId() , holder.btnFollow);
+        isFollowed(user.getUid() , holder.btnFollow);
 
-        if(user.getId().equals(firebaseUser.getUid())){
+        if(user.getUid().equals(firebaseUser.getUid())){
             holder.btnFollow.setVisibility(View.GONE);
         }
     }

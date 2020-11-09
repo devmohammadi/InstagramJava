@@ -6,19 +6,19 @@ public class User {
     private String username;
     private String bio;
     private String imageUrl;
-    private String id;
+    private String uid;
 
     public User(){
 
     }
 
-    public User(String name, String email, String username, String bio, String imageUrl, String id) {
+    public User(String name, String email, String username, String bio, String imageUrl, String uid) {
         this.name = name;
         this.email = email;
         this.username = username;
         this.bio = bio;
         this.imageUrl = imageUrl;
-        this.id = id;
+        this.uid = uid;
     }
 
     public String getName() {
@@ -61,11 +61,11 @@ public class User {
         this.imageUrl = imageUrl;
     }
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 }
