@@ -1,7 +1,7 @@
 package com.fmohammadi.instagramjava.model;
 
 public class User {
-    private String fullName;
+    private String name;
     private String email;
     private String username;
     private String bio;
@@ -12,8 +12,8 @@ public class User {
 
     }
 
-    public User(String fullName, String email, String username, String bio, String imageUrl, String id) {
-        this.fullName = fullName;
+    public User(String name, String email, String username, String bio, String imageUrl, String id) {
+        this.name = name;
         this.email = email;
         this.username = username;
         this.bio = bio;
@@ -21,12 +21,12 @@ public class User {
         this.id = id;
     }
 
-    public String getFullName() {
-        return fullName;
+    public String getName() {
+        return name;
     }
 
-    public void setFullName(String fullName) {
-        this.fullName = fullName;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public String getEmail() {
