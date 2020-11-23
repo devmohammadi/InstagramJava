@@ -23,4 +23,6 @@
     <string name="follow">Follow</string>
     <string name="tag">#tag</string>
     <string name="_123_posts">123 posts</string>
+    <string name="_123_like">123 like</string>
+    <string name="post_description">post description</string>
 </resources>
