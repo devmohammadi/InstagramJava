@@ -24,10 +24,17 @@ import com.squareup.picasso.Picasso;
 
 import java.util.List;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     private Context mContext;
     private List<Post> mPost;
+
+    public PostAdapter(Context mContext, List<Post> mPost) {
+        this.mContext = mContext;
+        this.mPost = mPost;
+    }
 
     private FirebaseUser firebaseUser;
 
@@ -54,7 +61,13 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
                         User user = snapshot.getValue(User.class);
 
-                        Picasso.get().load(user.getImageUrl()).into(holder.imageProfile);
+                        assert user != null;
+                        if(user.getImageUrl().equals("default")){
+                            holder.imageProfile.setImageResource(R.mipmap.ic_launcher_round);
+                        }else{
+                            Picasso.get().load(user.getImageUrl()).into(holder.imageProfile);
+                        }
+
                         holder.userName.setText(user.getUsername());
                         holder.author.setText(user.getName());
                     }
@@ -73,7 +86,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
 
     public class ViewHolder extends RecyclerView.ViewHolder{
 
-        public ImageView imageProfile;
+        public CircleImageView imageProfile;
         public ImageView postImage;
         public ImageView like;
         public ImageView comment;
@@ -89,7 +102,7 @@ public class PostAdapter extends RecyclerView.Adapter<PostAdapter.ViewHolder> {
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
 
-            imageProfile = itemView.findViewById(R.id.image_profile);
+            imageProfile = itemView.findViewById(R.id.profile_image);
             postImage = itemView.findViewById(R.id.postImage);
             like = itemView.findViewById(R.id.like);
             comment = itemView.findViewById(R.id.comment);

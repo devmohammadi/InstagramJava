@@ -7,6 +7,10 @@ public class Post {
     private String postid;
     private String publisher;
 
+    public Post() {
+    }
+
+
     public Post(String description, String imageurl, String postid, String publisher) {
         this.description = description;
         this.imageurl = imageurl;
